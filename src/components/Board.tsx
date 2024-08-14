@@ -2,10 +2,14 @@ import { useState } from "react"
 import Column from "./Column"
 import { closestCenter, DndContext } from "@dnd-kit/core"
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
+import Button from "./Button";
 
 interface Task {
   id: string;
   title: string;
+  description: string;
+  image: string | null;
+  tags: string[];
 }
 interface ColumnData {
   id: string;
@@ -18,22 +22,21 @@ const Board: React.FC<ColumnData> = () => {
       id: 'todo',
       title: 'To Do',
       tasks: [
-        { id: 'task-1', title: 'Task 1' },
-        { id: 'task-2', title: 'Task 2' },
+        { id: 'task-1', title: 'Kanban Board Project', description: "This is a description of this task", image: null, tags: ['Dndkit', 'Typscript'] },
       ],
     },
     {
       id: 'in-progress',
       title: 'In Progress',
       tasks: [
-        { id: 'task-3', title: 'Task 3' },
+
       ],
     },
     {
       id: 'done',
       title: 'Done',
       tasks: [
-        { id: 'task-4', title: 'Task 4' },
+
       ],
     },
   ])
@@ -44,22 +47,9 @@ const Board: React.FC<ColumnData> = () => {
 
     if (!over) return
 
-    //Find in columns which task.id === taskId (para) => return boolean
-    const findColumnByTaskId = (taskId: string) => {
-      return columns.find((column) => column.tasks.some((task) => task.id === taskId))
-    }
-    const findColumnById = (columnId: string) => {
-      return columns.find(column => column.id === columnId)
-    }
-
-    const updateColumnTasks = (columnId: string, newTasks: Task[]) => {
-      setColumns((prevColumns) => prevColumns.map((column) => column.id === columnId ? { ...column, tasks: newTasks } : column))
-    }
-
     const activeColumn = findColumnByTaskId(active.id)
     const overColumn = findColumnById(over.id)
     // console.log(activeColumn, overColumn);
-
 
     if (!activeColumn || !overColumn) return;
 
@@ -92,14 +82,99 @@ const Board: React.FC<ColumnData> = () => {
     }
 
   }
+
+  const addColumn = () => {
+    const newColumn: ColumnData = {
+      id: `column-${columns.length + 1}`,
+      title: `New Column`,
+      tasks: [],
+    };
+    setColumns([...columns, newColumn]);
+  };
+
+  const deleteColumn = (columnId: string) => {
+    setColumns((prevColumns) => prevColumns.filter(column => column.id !== columnId))
+  }
+
+  //Find in columns which task.id === taskId (para) => return boolean
+  const findColumnByTaskId = (taskId: string) => {
+    return columns.find((column) => column.tasks.some((task) => task.id === taskId))
+  }
+  const findColumnById = (columnId: string) => {
+    return columns.find(column => column.id === columnId)
+  }
+
+  const updateColumnTasks = (columnId: string, newTasks: Task[]) => {
+    setColumns((prevColumns) => prevColumns.map((column) => column.id === columnId ? { ...column, tasks: newTasks } : column))
+  }
+
+  const updateColumnTitle = (columnId: string, newTitle: string) => {
+    setColumns((prevColumns) => prevColumns.map((column) => column.id === columnId ? { ...column, title: newTitle } : column))
+  }
+
+  const addTaskToColumn = (columnId: string, task: { title: string; description: string; image: string | null; tags: string[] }) => {
+    const newTask: Task = {
+      id: `task-${Date.now()}`,
+      title: task.title,
+      description: task.description,
+      image: task.image,
+      tags: task.tags,
+    }
+    setColumns((prevColumns) => prevColumns.map((column) => column.id === columnId ? { ...column, tasks: [...column.tasks, newTask] } : column))
+  }
+
+  const handleEditTask = (updatedTask: Task) => {
+    setColumns((prevColumns) =>
+      prevColumns.map((column) =>
+        column.tasks.some((task) => task.id === updatedTask.id)
+          ? {
+            ...column,
+            tasks: column.tasks.map((task) =>
+              task.id === updatedTask.id ? updatedTask : task
+            ),
+          }
+          : column
+      )
+    );
+  };
+
+  const deleteTask = (taskId: string, columnId: string) => {
+    setColumns((prevColumns) =>
+      prevColumns.map((column) =>
+        column.id === columnId
+          ? {
+              ...column,
+              tasks: column.tasks.filter((task) => task.id !== taskId),
+            }
+          : column
+      )
+    );
+  };
+
+
   return (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <div className="flex space-x-4 p-4">
+      <div className="flex space-x-4 p-4 z-0">
         <SortableContext items={columns} strategy={verticalListSortingStrategy}>
           {columns.map((column) => (
-            <Column key={column.id} id={column.id} title={column.title} tasks={column.tasks} />
+            <Column
+              key={column.id}
+              id={column.id}
+              title={column.title}
+              tasks={column.tasks}
+              onTitleChange={(newTitle) => updateColumnTitle(column.id, newTitle)}
+              onAddTask={(task) => addTaskToColumn(column.id, task)}
+              onDelete={() => deleteColumn(column.id)}
+              onEditTask={handleEditTask} // Pass down the edit handler
+              onDeleteTask={deleteTask}
+            />
           ))}
         </SortableContext>
+        <Button
+          onClick={addColumn}
+          className="h-full bg-blue-500 hover:bg-blue-400 text-gray-100">
+          Add New column
+        </Button>
       </div>
     </DndContext >
   )

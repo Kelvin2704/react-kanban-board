@@ -1,0 +1,14 @@
+.circleInput {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+ .circleInput::-webkit-color-swatch {
+  border: none;
+} 
+.circleInput::-moz-color-swatch {
+  border: none;
+} 
