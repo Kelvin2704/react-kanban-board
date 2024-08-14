@@ -98,7 +98,7 @@ const Column: React.FC<ColumnProps> = ({ id, title, tasks, onAddTask, onTitleCha
                     ))}
                 </div>
             </div>
-            <div className="mt-5 p-2 outline-1 outline-offset-1 outline-gray-300 rounded outline-dashed flex justify-center bg-gray-100/50">
+            <div className="mt-5 p-2 outline-1 outline-offset-1 outline-gray-300 rounded outline-dashed flex justify-center bg-gray-100/50 hover:bg-gray-200/40 transition-all duration-300">
                 <button className="flex justify-center items-center gap-1 text-gray-900 w-full " onClick={() => setIsAddTaskModalOpen(true)}> <FaPlus /> Add Task</button>
             </div>
 

@@ -9,7 +9,7 @@ export default {
           "100%": { opacity: 1, transform: "translateY(0)" },
         },
         zoomIn: {
-          "0%": { opacity: 0, transform: "scale(0.5,0.5)" },
+          "0%": { opacity: 0, transform: "scale(0.8,0.8)" },
           "100%": { opacity: 1, transform: "scale(1,1)" },
         },
         zoomOut: {
@@ -19,7 +19,7 @@ export default {
       },
       animation: {
         fadeInUp: "fadeInUp 1s ease ",
-        zoomIn: "zoomIn 0.3s ease",
+        zoomIn: "zoomIn 0.1s ease",
         zoomOut: "zoomOut 0.3s ease",
       },
     },

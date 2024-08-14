@@ -3,6 +3,7 @@ import Column from "./Column"
 import { closestCenter, DndContext } from "@dnd-kit/core"
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import Button from "./Button";
+import { FaPlus } from "react-icons/fa6";
 
 interface Task {
   id: string;
@@ -33,8 +34,8 @@ const Board: React.FC<ColumnData> = () => {
       ],
     },
     {
-      id: 'done',
-      title: 'Done',
+      id: 'testing',
+      title: 'Testing',
       tasks: [
 
       ],
@@ -172,8 +173,8 @@ const Board: React.FC<ColumnData> = () => {
         </SortableContext>
         <Button
           onClick={addColumn}
-          className="h-full bg-blue-500 hover:bg-blue-400 text-gray-100">
-          Add New column
+          className="flex justify-center items-center  gap-1 h-full outline-1 outline-offset-1 outline-blue-500 bg-blue-100 outline-dashed hover:bg-blue-200 text-gray-900">
+          <FaPlus /> Add New Column
         </Button>
       </div>
     </DndContext >

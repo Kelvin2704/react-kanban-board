@@ -1,6 +1,9 @@
 import { useDraggable } from "@dnd-kit/core"
 import { FaEdit, FaGripLines, FaRegEdit, FaTrash } from "react-icons/fa";
 import Button from "./Button";
+import { TbGripVertical } from "react-icons/tb";
+import { CiStickyNote } from "react-icons/ci";
+import { FaNoteSticky, FaRegNoteSticky } from "react-icons/fa6";
 
 interface TaskProps {
     id: string
@@ -41,10 +44,10 @@ const Task: React.FC<TaskProps> = ({ id, title, description, tags, image, onClic
 
         <div ref={setNodeRef} style={style} className="flex flex-col bg-amber-50 p-4 space-y-3 rounded-lg shadow-md border border-dashed bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-80">
             <div {...listeners} {...attributes} className="cursor-grab flex justify-end">
-                <FaGripLines />
+                <TbGripVertical />
             </div>
-            <h1 className="text-xl font-semibold capitalize">
-                {title}
+            <h1 className="text-lg font-semibold capitalize flex items-center gap-1">
+            <FaRegNoteSticky />{title}
             </h1>
             <p className="text-gray-500 line-clamp-3">{description}</p>
             <img src={image} alt="" className="w-full rounded shadow" />
